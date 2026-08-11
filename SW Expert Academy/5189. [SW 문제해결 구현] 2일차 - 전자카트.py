@@ -7,18 +7,17 @@ for test_case in range(1, T + 1):
     aPers = list(itertools.permutations(aLen[1:]))
     arr = [list(map(int, input().split())) for _ in range(len(aLen))]
     result = float('inf')
-    
+
     for aPer in aPers:
-        sum = arr[0][1]
-        for num in aPer:
-            if num + 1 >= len(aPer):
-                sum += arr[num][0]
+        sum = arr[0][aPer[0] - 1]
+        for i in range(len(aPer)):
+            if i + 1 >= len(aPer):
+                sum += arr[aPer[i] - 1][0]
             else:
-                sum += arr[num][num + 1]
+                sum += arr[aPer[i] - 1][aPer[i + 1] - 1]
             if sum > result:
                 break
-        if result < sum:
+        if sum < result:
             result = sum
     
     print(f"#{test_case} {result}")
-

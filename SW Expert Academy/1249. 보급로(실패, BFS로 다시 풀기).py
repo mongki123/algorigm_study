@@ -1,38 +1,32 @@
 T = int(input())
 
-def Check(arr, x, y, dire):
+def Check(arr, i, j, sum, fix):
+    global result
 
-    N = len(arr[0])
-    global resultSum
-    
-    if x >= (N - 1) and y >= (N - 1):
+    if(sum >= result):
         return
-
-    directions = [(0, 1), (1, 0), (-1, 0), (0, -1)] #오, 아, 위, 왼
-    result = {'0' : 999, '1' : 999, '2' : 999, '3' : 999}
-    for i in range(len(directions)):
+    if(i == len(arr) - 1 and j == len(arr) - 1):
+        result = sum
+        print(result)
+        return
         
-        if (dire == 0 and i == 3) or (dire == 1 and i == 2) or (dire == 2 and i ==1) or (dire == 3 and i == 0): #되돌아가기 방지용
-            continue
-        if (x + directions[i][0]) < N and (x + directions[i][0]) >= 0 and (y + directions[i][1]) < N and (y + directions[i][1]) >= 0:
-            result[str(i)] = arr[x + directions[i][0]][y + directions[i][1]] 
-    rD = int(min(result, key=result.get))
-    resultSum += result[str(rD)]
-    Check(arr, x + directions[rD][0], y + directions[rD][1], rD)    
+    direction = [(-1, 0), (0, -1), (1, 0), (0, 1)]
+
+    for nDir in direction:
+        if(i + nDir[0] < len(arr) - 1 and i + nDir[0] >= 0 and j + nDir[1] < len(arr) - 1 and j + nDir[1] >= 0):
+            if((i + nDir[0], j + nDir[1]) not in fix):
+                Check(arr, i + nDir[0], j + nDir[1], sum + arr[i + nDir[0]][j + nDir[1]], fix.append((i + nDir[0],j + nDir[1])))
     
 
 for test_case in range(1, T + 1):
     N = int(input())
-    arr = []
-
+    arr = [[] for i in range(N)]
     for i in range(N):
-        arr.append(list(map(int, str(input()))))
+        for j in input():
+            arr[i].append(int(j))
 
-    resultSum = 0
-    Check(arr, 0, 0, -1)
+    result = float('inf')
+    Check(arr, 0, 0, 0, [])
 
-    print(f"#{test_case} {resultSum}")
-
-
-
-    
+    result = 0
+    print(f"#{test_case} {result}")
